@@ -37,8 +37,7 @@ This project implements the backend functionalities for an online shop. It inclu
 ## Technical Details
 
 - **Languages Used:** Java
-- **Design Patterns:** Singleton pattern for service classes
-- **Testing:** Includes methods like `clearServiceState()` for testing purposes to reset service states
+
 
 ## Installation
 
