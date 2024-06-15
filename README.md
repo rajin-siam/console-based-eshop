@@ -45,6 +45,6 @@ This project implements the backend functionalities for an online shop. It inclu
 ### Clone the repository:
 
 ```bash
-git clone <repository_url>
+git clone https://github.com/rajin-siam/onlineShop
 cd online-shop-backend
 
