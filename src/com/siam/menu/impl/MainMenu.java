@@ -37,6 +37,7 @@ public class MainMenu implements Menu {
 		}
 
 		Menu menuToNavigate = null;
+		
 		mainLoop: while (true) {
 			printMenuHeader();
 

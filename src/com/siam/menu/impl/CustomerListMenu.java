@@ -22,7 +22,7 @@ public class CustomerListMenu implements Menu {
 	@Override
 	public void start() {
 		printMenuHeader();
-		User[] users = userManagementService.getUsers();
+		List<User> users = userManagementService.getUsers();
 		for (User user : users) {
 			System.out.println(user);
 		}

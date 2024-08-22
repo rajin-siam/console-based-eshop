@@ -3,6 +3,8 @@ package com.siam.services.impl;
 import com.siam.enteties.User;
 import com.siam.enteties.impl.DefaultUser;
 import com.siam.services.UserManagementService;
+import com.siam.storage.impl.DefaultUserStoringService;
+
 
 import java.util.List;
 
@@ -16,12 +18,12 @@ public class DefaultUserManagementService implements UserManagementService {
 	private static final int DEFAULT_USERS_CAPACITY = 10;
 
 	private static DefaultUserManagementService instance;
+	private static DefaultUserStoringService userStoringService;
 	private int lastAddedIndex;
-	private User[] users;
 
-	{
-		users = new DefaultUser[10];
-		lastAddedIndex = 0;
+
+	static {
+		userStoringService = DefaultUserStoringService.getInstance();
 	}
 
 	private DefaultUserManagementService() {
@@ -36,10 +38,7 @@ public class DefaultUserManagementService implements UserManagementService {
 			return EMPTY_EMAIL_ERROR_MESSAGE;
 		}
 		if(getUserByEmail(user.getEmail()) == null) {
-			if(users.length <= lastAddedIndex) {
-				users = Arrays.copyOf(users, (users.length) * 2);
-			}
-			users[lastAddedIndex++] = user;
+			userStoringService.saveUser(user);
 			return NO_ERROR_MESSAGE;
 		}
 		else {
@@ -57,26 +56,14 @@ public class DefaultUserManagementService implements UserManagementService {
 
 
 	@Override
-	public User[] getUsers() {
-		int nonNullUsers = 0;
-		for(User user : users) {
-			if(user != null) nonNullUsers++;
-		}
-
-		User[] realUsers = new User[nonNullUsers];
-
-		int index = 0;
-		for(User user : users){
-			if(user != null) {
-				realUsers[index++] = user;
-			}
-		}
-		users = realUsers;
+	public List<User> getUsers() {
+		List<User> users = userStoringService.loadUsers();
 		return users;
 	}
 
 	@Override
 	public User getUserByEmail(String userEmail) {
+		List<User> users= userStoringService.loadUsers();
 		for(User user : users) {
 			if(user != null && user.getEmail().equals(userEmail)) {
 				return user;
@@ -85,8 +72,4 @@ public class DefaultUserManagementService implements UserManagementService {
 		return null;
 	}
 
-	void clearServiceState() {
-		lastAddedIndex = 0;
-		users = new User[DEFAULT_USERS_CAPACITY];
-	}
 }
