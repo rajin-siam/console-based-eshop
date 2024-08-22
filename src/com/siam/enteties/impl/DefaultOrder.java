@@ -3,13 +3,14 @@ package com.siam.enteties.impl;
 import com.siam.enteties.Order;
 import com.siam.enteties.Product;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class DefaultOrder implements Order {
+public class DefaultOrder implements Order, Serializable {
 
 	private static final int AMOUNT_OF_DIGITS_IN_CREDIT_CARD_NUMBER = 16;
 

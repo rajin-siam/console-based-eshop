@@ -3,7 +3,9 @@ package com.siam.enteties.impl;
 
 import com.siam.enteties.Product;
 
-public class DefaultProduct implements Product {
+import java.io.Serializable;
+
+public class DefaultProduct implements Product, Serializable {
 
 	private int id;
 	private String productName;

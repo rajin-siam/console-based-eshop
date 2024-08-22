@@ -4,22 +4,23 @@ package com.siam.services.impl;
 import com.siam.enteties.Order;
 import com.siam.enteties.impl.DefaultOrder;
 import com.siam.services.OrderManagementService;
+import com.siam.storage.OrderStoringService;
+import com.siam.storage.impl.DefaultOrderStoringService;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class DefaultOrderManagementService implements OrderManagementService {
-
-	private static final int DEFAULT_ORDER_CAPACITY = 10;
-
 	private static DefaultOrderManagementService instance;
-	private int lastAddedIndex;
-	private Order[] orders;
-
+	private List<Order> orders;
+	private static OrderStoringService orderStoringService;
 
 	{
-		orders = new DefaultOrder[DEFAULT_ORDER_CAPACITY];
+		orderStoringService = DefaultOrderStoringService.getInstance();
+		orders = orderStoringService.loadOrders();
 	}
-
 
 	public static OrderManagementService getInstance() {
 		if (instance == null) {
@@ -33,14 +34,13 @@ public class DefaultOrderManagementService implements OrderManagementService {
 		if(order == null) {
 			return;
 		}
-		if(orders.length <= lastAddedIndex) {
-			orders = Arrays.copyOf(orders, (orders.length) * 2);
-		}
-		orders[lastAddedIndex++] = order;
+		orders.add(order);
+		orderStoringService.saveOrders(orders);
+		return;
 	}
 
 	@Override
-	public Order[] getOrdersByUserId(int userId) {
+	public List<Order> getOrdersByUserId(int userId) {
 		int amountOfUserOrders = 0;
 		for (Order order : orders) {
 			if (order != null && order.getCustomerId() == userId) {
@@ -49,10 +49,10 @@ public class DefaultOrderManagementService implements OrderManagementService {
 		}
 
 		int index = 0;
-		Order[] userOrders = new DefaultOrder[amountOfUserOrders];
+		List<Order> userOrders = new ArrayList<>();
 		for (Order order : orders) {
 			if (order != null && order.getCustomerId() == userId) {
-				userOrders[index++] = order;
+				userOrders.add(order);
 			}
 		}
 		return userOrders;
@@ -62,29 +62,13 @@ public class DefaultOrderManagementService implements OrderManagementService {
 
 
 	@Override
-	public Order[] getOrders() {
-		int numberOfNonNullOrders = 0;
-		for (Order order : orders) {
-			if(order != null) {
-				numberOfNonNullOrders++;
-			}
+	public List<Order> getOrders() {
+		if (orders == null || orders.size() == 0) {
+			orders = orderStoringService.loadOrders();
 		}
-		Order [] nonNullOrders = new DefaultOrder[numberOfNonNullOrders];
-		int index = 0;
-		for (Order order : orders) {
-			if(order != null) {
-				nonNullOrders[index++] = order;
-			}
-		}
-		return nonNullOrders;
+		return this.orders;
 	}
 
 
-
-
-	void clearServiceState() {
-		lastAddedIndex = 0;
-		orders = new Order[DEFAULT_ORDER_CAPACITY];
-	}
 
 }

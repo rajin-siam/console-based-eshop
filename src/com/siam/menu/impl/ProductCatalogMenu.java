@@ -8,6 +8,7 @@ import com.siam.menu.Menu;
 import com.siam.services.ProductManagementService;
 import com.siam.services.impl.DefaultProductManagementService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ProductCatalogMenu implements Menu {
@@ -32,7 +33,7 @@ public class ProductCatalogMenu implements Menu {
 			printMenuHeader();
 			System.out.println("Enter Product ID to add it to the cart or 'menu' if you want to navigate back to the menu");
 
-			Product[] products = productManagementService.getProducts();
+			List<Product> products = productManagementService.getProducts();
 			for (Product product : products) {
 				System.out.println(product.toString());
 			}

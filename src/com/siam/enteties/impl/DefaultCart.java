@@ -11,19 +11,11 @@ import java.util.List;
 
 public class DefaultCart implements Cart {
 
-	private Product[] products;
-	int lastAddedIndex;
-	private static final int DEFAULT_PRODUCT_CAPACITY = 10;
-
-
-	{
-		products = new Product[0];
-		lastAddedIndex = 0;
-	}
+	private List<Product> products = new ArrayList<>();
 
 	@Override
 	public boolean isEmpty() {
-		if(products.length == 0) {
+		if(products.isEmpty()) {
 			return true;
 		}
 		else {
@@ -33,16 +25,7 @@ public class DefaultCart implements Cart {
 
 	@Override
 	public void addProduct(Product product) {
-		if(product == null) {
-			return ;
-		}
-		if(isEmpty()) {
-			products = new DefaultProduct[products.length + 1];
-		}
-		if(products.length <= lastAddedIndex) {
-			products = Arrays.copyOf(products, products.length * 2);
-		}
-		products[lastAddedIndex++] = product;
+		products.add(product);
 		return ;
 	}
 
@@ -67,7 +50,7 @@ public class DefaultCart implements Cart {
 
 	@Override
 	public void clear() {
-		products = new Product[DEFAULT_PRODUCT_CAPACITY];
+		products.clear();
 	}
 
 }

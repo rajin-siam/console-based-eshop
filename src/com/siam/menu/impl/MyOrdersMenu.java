@@ -32,12 +32,9 @@ public class MyOrdersMenu implements Menu {
 	}
 	private void printUserOrders () {
 		int userID = context.getLoggedInUser().getId();
-		Order[] LoggedInUserOrders = orderManagementService.getOrdersByUserId(userID);
-		if(LoggedInUserOrders.length == 0) {
-			System.out.println("Unfortunately, you don’t have any orders yet. Navigate back to main menu to place a new order");
-			return;
-		}
-		if(LoggedInUserOrders == null || LoggedInUserOrders.length == 0) {
+		List<Order> LoggedInUserOrders = orderManagementService.getOrdersByUserId(userID);
+
+		if(LoggedInUserOrders == null || LoggedInUserOrders.isEmpty()) {
 			System.out.println("Unfortunately, you don't have any orders yet. "
 					+ "Navigate back to main menu to place a new order");
 			return;
